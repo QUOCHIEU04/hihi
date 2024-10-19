@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc Mừng 20/10</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffe6e6;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            overflow: hidden;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        h1 {
+            font-size: 50px;
+            color: #ff1493;
+            text-shadow: 2px 2px 5px #ff69b4;
+            animation: sparkle 2s infinite alternate, flicker 3s infinite;
+            z-index: 1;
+        }
+
+        @keyframes sparkle {
+            0% { text-shadow: 2px 2px 5px #ff69b4; }
+            50% { text-shadow: 4px 4px 10px #ff1493; }
+            100% { text-shadow: 2px 2px 5px #ff69b4; }
+        }
+
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                opacity: 0.99;
+            }
+            20%, 24%, 55% {
+                opacity: 0.4;
+            }
+        }
+
+        .container {
+            text-align: center;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-color: red;
+            opacity: 0.4;
+            transform: rotate(45deg) translateZ(0);
+            animation: floatAround 8s infinite ease-in-out;
+        }
+
+        .heart:before, .heart:after {
+            content: "";
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-color: red;
+            border-radius: 50%;
+        }
+
+        .heart:before { top: -20px; left: 0; }
+        .heart:after { left: 20px; top: 0; }
+
+        @keyframes floatAround {
+            0% { transform: translate(0, 0) translateZ(0) rotate(0deg); opacity: 0.4; }
+            25% { transform: translate(300px, -100px) translateZ(100px) rotate(90deg); }
+            50% { transform: translate(-200px, -300px) translateZ(200px) rotate(180deg); opacity: 0.3; }
+            75% { transform: translate(200px, -400px) translateZ(300px) rotate(270deg); }
+            100% { transform: translate(-300px, -600px) translateZ(400px) rotate(360deg); opacity: 0.2; }
+        }
+
+        /* Tuyết rơi */
+        .snow {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: fall 10s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-50px) translateX(0); }
+            100% { transform: translateY(600px) translateX(50px); }
+        }
+
+        /* Pháo hoa */
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Hiệu ứng chớp nền */
+        @keyframes backgroundFlash {
+            0%, 100% { background-color: #ffe6e6; }
+            50% { background-color: #ffccff; }
+        }
+
+        body:hover {
+            animation: backgroundFlash 1s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ông trùm kéo view số 1 Việt Nam xin gửi lời chúc chân thành nhất đến chị Thẩm nhân ngày 20/10!
+            Chúc chị có một ngày thật tuyệt vời, luôn rạng rỡ. 
+            83 86 chị Thẩm nhé, 
+            Chúc chị mãi đẹp, mãi vui!  
+        </h1>
+    </div>
+
+    <canvas id="fireworksCanvas"></canvas>
+
+    <script>
+        var canvas = document.getElementById('fireworksCanvas');
+        var ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        var particles = [];
+
+        function random(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        function randomColor() {
+            var colors = ['#FF1461', '#18FF92', '#5A87FF', '#FBF38C', '#FF6F61', '#FFBA49'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        function createHeart() {
+            var heart = document.createElement('div');
+            heart.classList.add('heart');
+            var randomLeft = random(0, window.innerWidth - 40);
+            var randomTop = random(0, window.innerHeight - 40);
+            heart.style.left = randomLeft + 'px';
+            heart.style.top = randomTop + 'px';
+
+            document.body.appendChild(heart);
+            setTimeout(function() {
+                heart.remove();
+            }, 8000);
+        }
+
+        setInterval(createHeart, 500);
+
+        function Particle(x, y) {
+            this.x = x;
+            this.y = y;
+            this.speedX = random(-5, 5);
+            this.speedY = random(-5, 5);
+            this.radius = random(2, 4);
+            this.alpha = 1;
+            this.color = randomColor();
+
+            this.update = function() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.alpha -= 0.01;
+            };
+
+            this.draw = function() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.restore();
+            };
+        }
+
+        function createFirework() {
+            var x = random(100, canvas.width - 100);
+            var y = random(100, canvas.height / 2);
+            for (var i = 0; i < 50; i++) {
+                particles.push(new Particle(x, y));
+            }
+        }
+
+        function loop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (var i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].alpha <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+
+            if (Math.random() < 0.05) {
+                createFirework();
+            }
+
+            requestAnimationFrame(loop);
+        }
+
+        loop();
+
+        // Tạo hiệu ứng tuyết rơi
+        setInterval(function() {
+            var snow = document.createElement('div');
+            snow.classList.add('snow');
+            snow.style.left = random(0, window.innerWidth) + 'px';
+            snow.style.animationDuration = random(5, 10) + 's';
+            document.body.appendChild(snow);
+            setTimeout(function() {
+                snow.remove();
+            }, 10000);
+        }, 300);
+
+        // Âm thanh khi bấm vào màn hình
+        document.body.addEventListener('click', function() {
+            var audio = new Audio('https://www.soundjay.com/button/beep-07.wav');
+            audio.play();
+        });
+    </script>
+</body>
+</html>

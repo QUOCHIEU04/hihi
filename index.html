@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang 1 - Chọn</title>
+    <style>
+        body {
+            background-color: #e6f3ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .dialog-box {
+            background-color: #ffe6b3;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: absolute; /* Cho phép di chuyển tự do */
+        }
+
+        .dialog-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .dialog-box h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .button {
+            background-color: #ff66b2;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: transform 0.1s, background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #ff3385;
+            transform: scale(1.05);
+        }
+
+        .button:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <div class="dialog-box" id="dialogBox">
+        <h1>Bạn có muốn chọn?</h1>
+        <button class="button" onclick="window.location.href='chucmung.html'">Chọn</button>
+        <button class="button" onclick="moveDialogBox()">Không chọn</button>
+    </div>
+
+    <script>
+        function moveDialogBox() {
+            const dialogBox = document.getElementById('dialogBox');
+            const maxWidth = window.innerWidth - dialogBox.offsetWidth;
+            const maxHeight = window.innerHeight - dialogBox.offsetHeight;
+
+            // Tạo vị trí ngẫu nhiên trong khung màn hình
+            const randomX = Math.floor(Math.random() * maxWidth);
+            const randomY = Math.floor(Math.random() * maxHeight);
+
+            // Di chuyển hộp đến vị trí mới
+            dialogBox.style.left = randomX + 'px';
+            dialogBox.style.top = randomY + 'px';
+        }
+    </script>
+</body>
+</html>
